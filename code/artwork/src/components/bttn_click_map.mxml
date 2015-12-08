@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:ai="http://ns.adobe.com/ai/2009"
+		xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+		xmlns:flm="http://ns.adobe.com/flame/2008"
+		width="123" height="96">
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<s:Group x="0" y="0"
+			 visible.up="false">
+		<s:RichText d:id="124" d:userLabel="Click a Map Location to Calculate" x="0" y="0"
+					width="110" height="96" ai:aa="2" color="#AAD04B" columnCount="1"
+					fontFamily="Avenir LT Std 65 Medium" fontSize="18" kerning="on"
+					tabStops="S36 S72 S108" text="Click a Map Location to Calculate"
+					flm:variant="102" whiteSpaceCollapse="preserve"/>
+	</s:Group>
+	<s:Group x="86" y="42"
+			 visible.up="false">
+		<s:Ellipse x="14" y="14" width="9" height="9">
+			<s:stroke>
+				<s:SolidColorStroke weight="2" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+		<s:Ellipse x="7.5" y="7.5" width="22" height="22">
+			<s:stroke>
+				<s:SolidColorStroke weight="1" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+		<s:Ellipse x="0.5" y="0.5" width="36" height="36">
+			<s:stroke>
+				<s:SolidColorStroke weight="1" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+	</s:Group>
+	<s:Group x="104" y="61"
+			 visible.up="false">
+		<s:Path x="0.854" y="0.165"
+				data="M 10.696 10.835 L 0 0 L 0.109 14.822 L 3.484 11.611 L 7.057 18.835 L 9.146 18.835 L 9.146 16.519 L 6.196 10.835 L 10.696 10.835 Z"
+				winding="nonZero">
+			<s:fill>
+				<s:SolidColor color="#FFFFFF"/>
+			</s:fill>
+		</s:Path>
+	</s:Group>
+	<s:Group x="0" y="0"
+			 visible.down="false"
+			 visible.over="false">
+		<s:RichText d:id="25" d:userLabel="Click a Map Location to Calculate" x="0" y="0" width="110"
+					height="96" ai:aa="2" color="#989898" columnCount="1"
+					fontFamily="Avenir LT Std 65 Medium" fontSize="18" kerning="on"
+					tabStops="S36 S72 S108" text="Click a Map Location to Calculate"
+					flm:variant="15" whiteSpaceCollapse="preserve"/>
+	</s:Group>
+	<s:Group x="86" y="42"
+			 visible.down="false"
+			 visible.over="false">
+		<s:Ellipse x="14" y="14" width="9" height="9">
+			<s:stroke>
+				<s:SolidColorStroke weight="2" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+		<s:Ellipse x="7.5" y="7.5" width="22" height="22">
+			<s:stroke>
+				<s:SolidColorStroke weight="1" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+		<s:Ellipse x="0.5" y="0.5" width="36" height="36">
+			<s:stroke>
+				<s:SolidColorStroke weight="1" caps="none" joints="miter" miterLimit="10" color="#6D6E71"/>
+			</s:stroke>
+		</s:Ellipse>
+	</s:Group>
+	<s:Path x="104.854" y="61.165"
+			data="M 10.696 10.835 L 0 0 L 0.109 14.822 L 3.484 11.611 L 7.057 18.835 L 9.146 18.835 L 9.146 16.519 L 6.196 10.835 L 10.696 10.835 Z"
+			winding="nonZero"
+			visible.down="false"
+			visible.over="false">
+		<s:fill>
+			<s:SolidColor color="#939598"/>
+		</s:fill>
+	</s:Path>
+</s:Skin>

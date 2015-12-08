@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   title="About the Data"
+			   close="PopUpManager.removePopUp( this )"
+			   width="350" height="250"
+			   backgroundColor="0x231F20">
+	<s:layout>
+		<s:VerticalLayout paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<mx:Text id="lblData" fontWeight="bold" color="0x9C9C9C"
+			 width="100%" height="100%">
+		<mx:htmlText>
+<![CDATA[All MPG data comes from the US Department of Energy and the Environmental Protection Agency.
+Please see <u><a target="_blank" href="http://www.fueleconomy.gov/feg/download.shtml">http://www.fueleconomy.gov</a></u> for more information.
+			
+The combined fuel equivalent values were used for this application. Fuel prices are published periodically by the U.S. Energy Information Administration. The spreadsheet can be found here: <u><a target="_blank" href="http://www.eia.gov/oog/ftparea/wogirs/xls/pswrgvwreg.xls">http://www.eia.gov/oog/ftparea/wogirs/xls/pswrgvwreg.xls</a></u>. Prices are published by <u><a target="_blank" href="http://en.wikipedia.org/wiki/Petroleum_Administration_for_Defense_Districts">PADD</a></u> districts.]]>
+		</mx:htmlText>
+	</mx:Text>
+
+</s:TitleWindow>

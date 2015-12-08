@@ -1,7 +1,9 @@
 # Build and Release Folders
-bin/
-bin-debug/
-bin-release/
+**/bin/
+**/bin-debug/
+**/bin-output/
+**/bin-release/
+**/html-template/
 
 # Other files and folders
 .settings/
@@ -9,3 +11,9 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/gas_prices.old.xml
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/pswrgvwreg.old.xls
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/pswrgvwreg.xls
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/pswrgvwreg.xls.old
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/vehicles.old.xml
+/code/application/src/com/esri/apl/mpd_mvc/assets/data/test.xls

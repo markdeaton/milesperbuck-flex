@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 >
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<mx:ProgressBar height="30" labelPlacement="bottom" minimum="0" maximum="100" enabled="true" 
+					label="{message}" indeterminate="true" x="0" y="0" id="lblProcessing"/>
+
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<fx:String id="message">Please wait; working...</fx:String>
+	</fx:Declarations>
+</s:Panel>

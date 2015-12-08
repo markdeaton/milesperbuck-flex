@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Graphic xmlns:ai="http://ns.adobe.com/ai/2009" xmlns:fc="http://ns.adobe.com/flashcatalyst/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns="http://ns.adobe.com/fxg/2008" xmlns:flm="http://ns.adobe.com/flame/2008" version="2.0">
+	<Rect x="4" y="4" d:id="9" flm:variant="4" width="109" height="107">
+		<fill>
+			<RadialGradient scaleX="175.346" scaleY="175.346" x="54.5" y="53.5">
+				<GradientEntry color="#464547" ratio="0.300613"/>
+				<GradientEntry color="#302F31" ratio="0.596483"/>
+				<GradientEntry ratio="1"/>
+			</RadialGradient>
+		</fill>
+	</Rect>
+	<Group x="4" y="4" alpha="0.45" blendMode="normal" d:id="10" flm:variant="6">
+		<mask>
+			<Group ai:spare="1">
+				<Rect width="109" height="107">
+					<fill>
+						<SolidColor color="#FFFFFF"/>
+					</fill>
+				</Rect>
+			</Group>
+		</mask>
+		<BitmapImage source="@Embed('../images/mpd/FLM_GroupImage_5.png')"/>
+	</Group>
+	<Group x="5" y="5" d:id="11" d:userLabel="George.psd">
+		<mask>
+			<Group ai:spare="1">
+				<Rect width="107" height="107">
+					<fill>
+						<SolidColor color="#FFFFFF"/>
+					</fill>
+				</Rect>
+			</Group>
+		</mask>
+		<BitmapImage source="@Embed('../images/mpd/Image_0003.png')" d:userLabel="Layer 1 + Black &amp; White 1"/>
+	</Group>
+	<Rect x="112" y="6" width="322" height="105">
+		<fill>
+			<LinearGradient rotation="90" scaleX="284.007" x="161" y="-12">
+				<GradientEntry ratio="0.0736196"/>
+				<GradientEntry color="#4A4849" ratio="1" flm:midpoint="0.31415699005127"/>
+			</LinearGradient>
+		</fill>
+	</Rect>
+	<Group x="159" y="18">
+		<Line x="0.5" y="0.5" xTo="259">
+			<stroke>
+				<SolidColorStroke caps="none" color="#989898" joints="miter" miterLimit="10"/>
+			</stroke>
+		</Line>
+		<Line x="0.5" y="19.5" xTo="259">
+			<stroke>
+				<SolidColorStroke caps="none" color="#989898" joints="miter" miterLimit="10"/>
+			</stroke>
+		</Line>
+	</Group>
+	<Group x="139" y="17" alpha="0.4" flm:isolated="false">
+		<mask>
+			<Group x="19.95" y="2" ai:spare="1">
+				<Rect width="259" height="19">
+					<fill>
+						<SolidColor color="#FFFFFF"/>
+					</fill>
+				</Rect>
+			</Group>
+		</mask>
+		<BitmapImage source="@Embed('../images/mpd/Image_0006.png')" ai:embed="1"/>
+	</Group>
+	<Rect x="435" y="6" width="322" height="105">
+		<fill>
+			<LinearGradient rotation="90" scaleX="284.007" x="161" y="-12">
+				<GradientEntry ratio="0.0736196"/>
+				<GradientEntry color="#4A4849" ratio="1" flm:midpoint="0.31415699005127"/>
+			</LinearGradient>
+		</fill>
+	</Rect>
+	<Group x="482" y="18">
+		<Line x="0.5" y="0.5" xTo="259">
+			<stroke>
+				<SolidColorStroke caps="none" color="#989898" joints="miter" miterLimit="10"/>
+			</stroke>
+		</Line>
+		<Line x="0.5" y="19.5" xTo="259">
+			<stroke>
+				<SolidColorStroke caps="none" color="#989898" joints="miter" miterLimit="10"/>
+			</stroke>
+		</Line>
+	</Group>
+	<Group x="462" y="17" alpha="0.4" flm:isolated="false">
+		<mask>
+			<Group x="20" y="2" ai:spare="1">
+				<Rect width="259" height="19">
+					<fill>
+						<SolidColor color="#FFFFFF"/>
+					</fill>
+				</Rect>
+			</Group>
+		</mask>
+		<BitmapImage source="@Embed('../images/mpd/Image_0007.png')" ai:embed="1"/>
+	</Group>
+	<Rect x="4" y="4" width="915" height="540">
+		<stroke>
+			<SolidColorStroke caps="none" color="#FFFFFF" joints="miter" miterLimit="10" weight="8"/>
+		</stroke>
+	</Rect>
+	<Line x="8" y="114" xTo="910">
+		<stroke>
+			<SolidColorStroke caps="none" color="#FFFFFF" joints="miter" miterLimit="10" weight="8"/>
+		</stroke>
+	</Line>
+	<Line x="113" y="4" yTo="110">
+		<stroke>
+			<SolidColorStroke caps="none" color="#FFFFFF" joints="miter" miterLimit="10" weight="8"/>
+		</stroke>
+	</Line>
+	<Line x="436" y="4" yTo="110">
+		<stroke>
+			<SolidColorStroke caps="none" color="#FFFFFF" joints="miter" miterLimit="10" weight="8"/>
+		</stroke>
+	</Line>
+	<Line x="760" y="4" yTo="110">
+		<stroke>
+			<SolidColorStroke caps="none" color="#FFFFFF" joints="miter" miterLimit="10" weight="8"/>
+		</stroke>
+	</Line>
+</Graphic>

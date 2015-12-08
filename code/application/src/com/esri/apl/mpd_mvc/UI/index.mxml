@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:esri="http://www.esri.com/2008/ags" 
+			   minWidth="1000" minHeight="650"
+			   creationComplete="creationComplete(event)"
+			   backgroundColor="0x231F20" 
+			   xmlns:ns="com.esri.apl.mpd_mvc.controller.*"
+			   pageTitle="Miles per Dollar"
+			   >
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace esri "http://www.esri.com/2008/ags";
+		@namespace ns "com.esri.apl.mpd_mvc.controller.*";
+		
+		.sequenceLabel {
+			fontSize		: 16;
+			fontWeight		: bold;
+			verticalAlign	: bottom;
+			textAlign		: center;
+			backgroundColor	: white;
+			color			: black;
+			bottom			: 0;
+			left			: 0;
+		}
+		.vehicleLabel {
+			fontSize		: 14;
+		}
+		.vehicleParameterList {
+			contentBackgroundColor	: black;
+			contentBackgroundAlpha	: 0.7;
+			borderAlpha				: 0;
+/* 			paddingBottom			: 3;
+			paddingTop				: 3;
+			paddingLeft				: 3;
+			paddingRight			: 3;
+ */		}
+		.efficiencyInfo {
+			color			: "0x999999";
+			verticalAlign	: middle;
+			fontSize		: 16;
+			fontWeight		: normal;
+			alpha			: 0.5;
+		}
+		mx|ColorPicker {
+			top				: 5;
+			left			: 5;
+		}
+	</fx:Style>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<mx:NumberFormatter id="fmtMPG" precision="1"/>
+		<mx:NumberFormatter id="fmtMPD" precision="1"/>
+		<mx:CurrencyFormatter id="fmtGasPrice" precision="2"/>
+		
+		<esri:SimpleLineSymbol id="slsOutline" color="0x404040"/>
+
+		<esri:DrawTool id="tbDraw" map="{map}"					   
+					   drawEnd="controller.dispatchEvent( new LocationSelectedEvent( LocationSelectedEvent.LOCATION_SELECTED, event.graphic, true ) )">
+		</esri:DrawTool>
+		
+		<s:Fade id="fxVehicleListFadeOut" alphaFrom="1" alphaTo="0" duration="750"/>
+		<s:Fade id="fxVehicleListFadeIn" alphaFrom="0" alphaTo="1" duration="750"/>
+</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.esri.apl.mpd_mvc.events.LocationSelectedEvent;
+			import com.esri.apl.mpd_mvc.events.VehicleParameterSelectedEvent;
+			import com.esri.apl.mpd_mvc.model.Model;
+			import com.esri.apl.mpd_mvc.model.Vehicle;
+			
+			import flashx.textLayout.operations.PasteOperation;
+			
+			import mx.binding.utils.ChangeWatcher;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			import mx.managers.PopUpManager;
+			
+			
+			protected function creationComplete(event:FlexEvent):void
+			{
+				ChangeWatcher.watch( Model.instance, "atLeastOneVehicleSelected", function( event:PropertyChangeEvent ):void {
+					if ( event.newValue == true ) {
+						tbDraw.activate( DrawTool.MAPPOINT );
+					}
+					else {
+						tbDraw.deactivate();
+					}
+				});
+			}
+			
+			protected function grpVehicle1Info_clickHandler(event:MouseEvent):void
+			{
+				var bHideLists:Boolean = ( lstYears1.visible || lstMakes1.visible || lstModels1.visible || lstEngines1.visible );
+				
+				lstYears1.visible = lstMakes1.visible = lstModels1.visible = lstEngines1.visible = false;
+				controller.dispatchEvent( new VehicleParameterSelectedEvent( 0, VehicleParameterSelectedEvent.CLEARSELECTION ) );
+				
+				if ( !bHideLists ) {	
+					var pt:Point=grpVehicle1Info.contentToGlobal(new Point(0, lblVehicle1.height + 4));
+					lstYears1.move(pt.x, pt.y);
+					lstYears1.visible = true;
+				}
+			}
+			
+			protected function grpVehicle2Info_clickHandler(event:MouseEvent):void
+			{
+				var bHideLists:Boolean = ( lstYears2.visible || lstMakes2.visible || lstModels2.visible || lstEngines2.visible );
+				lstYears2.visible = lstMakes2.visible = lstModels2.visible = lstEngines2.visible = false;
+				controller.dispatchEvent( new VehicleParameterSelectedEvent( 1, VehicleParameterSelectedEvent.CLEARSELECTION ) );
+				
+				if ( !bHideLists ) {
+					var pt:Point=grpVehicle2Info.contentToGlobal(new Point(0, lblVehicle2.height + 4));
+					lstYears2.move(pt.x, pt.y);
+					lstYears2.visible = true;
+				}
+			}
+			
+			protected function infoIcon_clickHandler(event:MouseEvent):void
+			{
+				var ad:IFlexDisplayObject = PopUpManager.createPopUp( this, AboutData );
+				PopUpManager.centerPopUp( ad );
+			}
+			
+			protected function vehicleChoiceList_changeHandler(event:FlexEvent):void
+			{
+				var iSelIdx:int = event.currentTarget.selectedIndex;
+				if ( iSelIdx == -1 ) return;
+
+				var iVehicle:int;
+				var lstNext:List;
+				var sSelectionEvent:String;
+				
+				switch ( event.currentTarget ) {
+					case lstYears1:
+						iVehicle = 0;
+						lstNext = lstMakes1;
+						sSelectionEvent = VehicleParameterSelectedEvent.YEAR;
+						break;
+					case lstYears2:
+						iVehicle = 1;
+						lstNext = lstMakes2;
+						sSelectionEvent = VehicleParameterSelectedEvent.YEAR;
+						break;
+					case lstMakes1:
+						iVehicle = 0;
+						lstNext = lstModels1;
+						sSelectionEvent = VehicleParameterSelectedEvent.MAKE;
+						break;
+					case lstMakes2:
+						iVehicle = 1;
+						lstNext = lstModels2;
+						sSelectionEvent = VehicleParameterSelectedEvent.MAKE;
+						break;
+					case lstModels1:
+						iVehicle = 0;
+						lstNext = Vehicle(Model.instance.vehicles.getItemAt(iVehicle)).selectedEngine == null ? lstEngines1 : null;
+						sSelectionEvent = VehicleParameterSelectedEvent.MODEL;
+						break;
+					case lstModels2:
+						iVehicle = 1;
+						lstNext = Vehicle(Model.instance.vehicles.getItemAt(iVehicle)).selectedEngine == null ? lstEngines2 : null;
+						sSelectionEvent = VehicleParameterSelectedEvent.MODEL;
+						break;
+					case lstEngines1:
+						iVehicle = 0;
+						lstNext = null;
+						sSelectionEvent = VehicleParameterSelectedEvent.ENGINE;
+						break;
+					case lstEngines2:
+						iVehicle = 1;
+						lstNext = null;
+						sSelectionEvent = VehicleParameterSelectedEvent.ENGINE;
+						break;
+					default:
+						Alert.show( "Unexpected list clicked: " + flash.utils.getQualifiedClassName( event.currentTarget ) );
+						break;
+				}
+
+				controller.dispatchEvent( new VehicleParameterSelectedEvent( iVehicle, sSelectionEvent, event.currentTarget.dataProvider[ iSelIdx ] ) );
+				List(event.currentTarget).visible = false;
+				
+				if ( lstNext != null ) lstNext.visible = true;
+			}
+			
+			private function listPositionForVehicleLabel( label:TextArea, height:int ):Point {
+				var ptList:Point = new Point( label.x + 5, label.y + height );
+				var ptAbs:Point = label.localToGlobal( ptList );
+				return ptAbs;
+			}
+		]]>		
+	</fx:Script>
+	
+	<!-- User Interface -->
+	<ns:Controller id="controller"/>
+	
+	<s:VGroup width="100%" height="100%"
+			  gap="-3" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+			  >
+		<!-- Title -->
+		<s:HGroup width="100%" height="60" verticalAlign="middle">
+			<s:Image horizontalAlign="left" scaleMode="letterbox" width="100%"
+					 source="@Embed(source='com/esri/apl/mpd_mvc/assets/images/title.png')"/>
+			<s:Image buttonMode="true"
+					 toolTip="About the Data"
+					 source="@Embed(source='com/esri/apl/mpd_mvc/assets/images/info_gray.png')"
+					 click="infoIcon_clickHandler(event)"/>
+		</s:HGroup>
+		
+		<s:HGroup width="100%" gap="-3">
+			<!-- George -->
+			<s:BorderContainer borderColor="white" borderWeight="3" backgroundColor="0x333333">
+				<s:Image source="@Embed(source='com/esri/apl/mpd_mvc/assets/images/george.png')"/>
+			</s:BorderContainer>
+			<!-- Vehicle 1 -->
+			<s:BorderContainer width="50%" borderColor="white" borderWeight="3" backgroundColor="0x333333">
+				<s:HGroup paddingTop="5" paddingLeft="5" paddingBottom="5" paddingRight="5" width="100%" height="100%">
+					<mx:ColorPicker id="cpColor1" selectedColor="0xAAD04B" chromeColor="gray"
+									toolTip="Click to change color for vehicle 1 results"/>
+					<s:VGroup height="100%" width="100%" id="grpVehicle1Info" paddingTop="3"
+							  buttonMode="true" click="grpVehicle1Info_clickHandler(event)">
+						<s:HGroup verticalAlign="top" width="100%">
+							<s:TextArea id="lblVehicle1"
+										editable="false"
+										selectable="false"
+										borderAlpha="0"
+										contentBackgroundAlpha="0"
+										lineBreak="toFit"
+										updateComplete="lblVehicle1.heightInLines = NaN;"
+										paddingTop="3"
+										color="{cpColor1.selectedColor}" 
+										text="{Model.instance.vehicles.getItemAt( 0 ).label}"
+										verticalAlign="top"
+										styleName="vehicleLabel"
+										width="100%"/>
+							<s:Image source="@Embed(source='com/esri/apl/mpd_mvc/assets/images/32_check.png')"
+									 visible="{Vehicle(Model.instance.vehicles.getItemAt(0)).vehicleSelected}"/>
+						</s:HGroup>
+						<s:HGroup height="100%" width="100%" verticalAlign="bottom">
+							<s:HGroup width="100%" verticalAlign="middle"
+									  visible="{Vehicle(Model.instance.vehicles.getItemAt(0)).vehicleSelected}">
+								<s:Label textAlign="center" styleName="efficiencyInfo"
+										 text="{fmtMPG.format(Vehicle(Model.instance.vehicles.getItemAt(0)).selectedGasMileage) + ' MPG'}"/>
+								<s:Label textAlign="center" styleName="efficiencyInfo"
+										 text="@ {fmtGasPrice.format(Model.instance.selectedGasPrice)}/Gal"
+										 visible="{!isNaN(Model.instance.selectedGasPrice)}"/>
+								<s:Spacer width="10"/>
+								<s:Label textAlign="center" styleName="efficiencyInfo" 
+										 fontSize="28" fontWeight="bold" alpha="1"
+										 text="{fmtMPD.format(Vehicle(Model.instance.vehicles.getItemAt(0)).milesPerDollar(Model.instance.selectedGasPrice))} mi"
+										 visible="{!isNaN(Model.instance.selectedGasPrice)}"/>
+							</s:HGroup>
+						</s:HGroup>
+					</s:VGroup>
+				</s:HGroup>
+				
+				<s:Label styleName="sequenceLabel" text="1" width="20" height="20"/>
+			</s:BorderContainer>
+						
+			<!-- Vehicle 2 -->
+			<s:BorderContainer width="50%" borderColor="white" borderWeight="3" backgroundColor="0x333333">				
+				<s:HGroup paddingTop="5" paddingLeft="5" paddingBottom="5" paddingRight="5" width="100%" height="100%">
+					<mx:ColorPicker id="cpColor2" selectedColor="0xFFFF00" chromeColor="gray"
+									toolTip="Click to change color for vehicle 2 results"/>
+					<s:VGroup height="100%" width="100%" id="grpVehicle2Info" paddingTop="3"
+							  buttonMode="true" click="grpVehicle2Info_clickHandler(event)">
+						<s:HGroup verticalAlign="top" width="100%">
+							<s:TextArea id="lblVehicle2" 
+										editable="false"
+										borderAlpha="0"
+										selectable="false"
+										contentBackgroundAlpha="0"
+										lineBreak="toFit"
+										updateComplete="lblVehicle2.heightInLines = NaN;"
+										paddingTop="3"
+										color="{cpColor2.selectedColor}" 
+										text="{Model.instance.vehicles.getItemAt( 1 ).label}"
+										verticalAlign="top"
+										styleName="vehicleLabel"
+										width="100%"/>					
+							<s:Image source="@Embed(source='com/esri/apl/mpd_mvc/assets/images/32_check.png')"
+									 visible="{Vehicle(Model.instance.vehicles.getItemAt(1)).vehicleSelected}"/>
+						</s:HGroup>
+						<s:HGroup height="100%" width="100%" verticalAlign="bottom">
+							<s:HGroup width="100%" verticalAlign="middle" 
+									  visible="{Vehicle(Model.instance.vehicles.getItemAt(1)).vehicleSelected}">
+								<s:Label textAlign="center" styleName="efficiencyInfo"
+										 text="{fmtMPG.format(Vehicle(Model.instance.vehicles.getItemAt(1)).selectedGasMileage) + ' MPG'}"/>
+								<s:Label textAlign="center" styleName="efficiencyInfo"
+										 text="@ {fmtGasPrice.format(Model.instance.selectedGasPrice)}/Gal"
+										 visible="{!isNaN(Model.instance.selectedGasPrice)}"/>
+								<s:Spacer width="10"/>
+								<s:Label textAlign="center" styleName="efficiencyInfo" 
+										 fontSize="28" fontWeight="bold" alpha="1"
+										 text="{fmtMPD.format(Vehicle(Model.instance.vehicles.getItemAt(1)).milesPerDollar(Model.instance.selectedGasPrice))} mi"
+										 visible="{!isNaN(Model.instance.selectedGasPrice)}"/>
+							</s:HGroup>
+						</s:HGroup>
+					</s:VGroup>
+				</s:HGroup>
+				<s:Label styleName="sequenceLabel" text="2" width="20" height="20"/>
+			</s:BorderContainer>
+			<!-- Click a location -->
+			<s:BorderContainer borderColor="white" borderWeight="3" backgroundColor="0x333333">
+				<s:Group alpha="{Model.instance.atLeastOneVehicleSelected ? 1.0 : 0.25}">
+					<s:Label text="Click a Map Location to Calculate" fontSize="16" fontWeight="bold"
+							 top="10" left="10"
+							 width="140" lineBreak="toFit" color="0xAAD04B"
+							 />
+					<s:Image bottom="5" right="5" source="@Embed('com/esri/apl/mpd_mvc/assets/images/mapClick.png')"/>
+				</s:Group>
+				<s:Label styleName="sequenceLabel" text="3" width="20" height="20"/>
+			</s:BorderContainer>
+		</s:HGroup>
+		
+		
+		<!--   Map    -->
+		<s:BorderContainer width="100%" height="100%" borderColor="white" borderWeight="3" backgroundColor="0x333333">
+			<esri:Map id="map" width="100%" height="100%" panArrowsVisible="false" zoomSliderVisible="true"
+					  extent="{Model.instance.mapExtent}">
+				<esri:filters>
+					<s:DropShadowFilter inner="true"/>
+				</esri:filters>
+				<esri:ArcGISTiledMapServiceLayer url="{Model.instance.baseMapUrl}" />
+				<esri:GraphicsLayer id="lyrVehicleRange1" 
+									graphicProvider="{Vehicle(Model.instance.vehicles.getItemAt(0)).graphicProvider}">
+					<esri:symbol>
+						<esri:SimpleFillSymbol color="{cpColor1.selectedColor}" outline="{slsOutline}"/>
+					</esri:symbol>
+				</esri:GraphicsLayer>
+				<esri:GraphicsLayer id="lyrVehicleRange2" graphicProvider="{Vehicle(Model.instance.vehicles.getItemAt(1)).graphicProvider}">
+					<esri:symbol>
+						<esri:SimpleFillSymbol color="{cpColor2.selectedColor}" outline="{slsOutline}"/>
+					</esri:symbol>
+				</esri:GraphicsLayer>
+				<esri:GraphicsLayer id="lyrClickLocation" graphicProvider="{Model.instance.clickLocGraphicProvider}">
+					<esri:symbol>
+						<esri:SimpleMarkerSymbol style="diamond" size="20" color="white">
+							<esri:outline>
+								<esri:SimpleLineSymbol width="2" color="0x333333"/>
+							</esri:outline>
+						</esri:SimpleMarkerSymbol>
+					</esri:symbol>
+				</esri:GraphicsLayer>
+			</esri:Map>
+		</s:BorderContainer>
+	</s:VGroup>
+	
+	<!-- Vehicle 1 selection lists -->
+	<s:List id="lstYears1"
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(0)).availableYears}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="7" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstMakes1" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(0)).availableMakes}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="3" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstModels1" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(0)).availableModels}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="2" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstEngines1"
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(0)).availableEngines}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle1, lblVehicle1.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:VerticalLayout requestedRowCount="{Vehicle(Model.instance.vehicles.getItemAt(0)).availableEngines.length}"/>
+		</s:layout>
+	</s:List>
+
+
+	<!-- Vehicle 2 selection lists -->
+	<s:List id="lstYears2" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(1)).availableYears}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"			
+			visible="false"
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="7" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstMakes2" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(1)).availableMakes}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="3" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstModels2" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(1)).availableModels}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).y}"
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList"
+			showEffect="{fxVehicleListFadeIn}" hideEffect="{fxVehicleListFadeOut}">
+		<s:layout>
+			<s:TileLayout orientation="columns" requestedColumnCount="2" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"/>
+		</s:layout>
+	</s:List>
+	<s:List id="lstEngines2" 
+			dataProvider="{Vehicle(Model.instance.vehicles.getItemAt(1)).availableEngines}"
+			itemRenderer="com.esri.apl.mpd_mvc.assets.itemRenderers.ListItemRenderer"
+			x="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).x}" 
+			y="{listPositionForVehicleLabel(lblVehicle2, lblVehicle2.height).y}"			
+			color="white"
+			valueCommit="vehicleChoiceList_changeHandler(event)"
+			visible="false"			
+			styleName="vehicleParameterList">
+		<s:layout>
+			<s:VerticalLayout requestedRowCount="{Vehicle(Model.instance.vehicles.getItemAt(1)).availableEngines.length}"/>
+		</s:layout>
+	</s:List>
+</s:Application>

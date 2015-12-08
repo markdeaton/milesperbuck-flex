@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:flm="http://ns.adobe.com/flame/2008"
+		xmlns:ai="http://ns.adobe.com/ai/2009"
+		xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+		width="254" height="122">
+	<fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<s:Group d:userLabel="Light i" x="74" y="0" alpha="0.25" flm:isolated="false"
+			 visible.over="false">
+		<s:RichText d:id="23" d:userLabel="i" x="4" y="4" width="12" height="13" ai:aa="2"
+					color="#AAD04B" columnCount="1" fontFamily="Avenir LT Std 95 Black"
+					fontSize="15.2778" kerning="on" tabStops="S30.5556106567383" text="i"
+					textAlign="center" flm:variant="14" whiteSpaceCollapse="preserve"
+					visible.down="false"/>
+		<s:Ellipse x="1" y="1" width="17" height="17"
+				   visible.down="false">
+			<s:stroke>
+				<s:SolidColorStroke weight="2" caps="none" joints="miter" miterLimit="10" color="#AAD04B"/>
+			</s:stroke>
+		</s:Ellipse>
+	</s:Group>
+	<s:Group x="0" y="0" transformX="74">
+		<s:RichText d:id="50" d:userLabel="i" x="78" y="4" width="12" height="13" ai:aa="2"
+					color="#AAD04B" columnCount="1" fontFamily="Avenir LT Std 95 Black"
+					fontSize="15.2778" kerning="on" tabStops="S30.5556106567383" text="i"
+					textAlign="center" flm:variant="32" whiteSpaceCollapse="preserve"
+					visible.up="false"/>
+		<s:Ellipse x="75" y="1" width="17" height="17"
+				   visible.up="false">
+			<s:stroke>
+				<s:SolidColorStroke weight="2" caps="none" joints="miter" miterLimit="10" color="#AAD04B"/>
+			</s:stroke>
+		</s:Ellipse>
+		<s:Group d:id="48" x="0" y="17" alpha="0.9" blendMode="normal" flm:knockout="false"
+				 transformX="-74"
+				 visible.up="false">
+			<s:BitmapImage x="0" y="0" alpha="0.55" blendMode="multiply" ai:embed="1"
+						   smooth="true" source="@Embed('assets/images/mpd/Image_0009.png')"/>
+			<s:Path x="4" y="4.277" winding="nonZero" data="M 244 94.149 C 244 94.464 244.242 94.723 243.927 94.723 L 1.073 94.723 C 0.758 94.723 0 94.464 0 94.149 L 0 13.296 C 0 12.981 0.758 12.723 1.073 12.723 L 69.927 12.723 C 70.242 12.723 70.647 12.51 70.826 12.251 L 79.174 0.194 C 79.354 -0.065 79.647 -0.065 79.826 0.194 L 88.174 12.251 C 88.354 12.51 88.758 12.723 89.073 12.723 L 243.927 12.723 C 244.242 12.723 244 12.981 244 13.296 L 244 94.149 Z">
+				<s:fill>
+					<s:SolidColor color="#464547"/>
+				</s:fill>
+			</s:Path>
+		</s:Group>
+		<s:RichText d:id="49" d:userLabel="All MPG data comes from the US Department of Energ..."
+					x="18" y="46" width="227" height="60" ai:aa="2" color="#000000" columnCount="1"
+					fontFamily="Myriad Pro" fontSize="10" kerning="on"
+					tabStops="S36 S72 S108 S144 S180 S216" trackingRight="-2.5%" flm:variant="31"
+					whiteSpaceCollapse="preserve"
+					visible.up="false">
+			<s:content><s:p><s:span color="#CBCBCB" fontFamily="Avenir LT Std 55 Roman">All MPG data comes from the US Department of Energy and the Environmental Protection Agency. Please see </s:span><s:span color="#F1F1F1" fontFamily="Avenir LT Std 85 Heavy">http://www.fueleconomy.gov</s:span><s:span color="#CBCBCB" fontFamily="Avenir LT Std 55 Roman"> for more information. The combined fuel equivalent values were used for this application.</s:span></s:p></s:content>
+		</s:RichText>
+	</s:Group>
+</s:Skin>

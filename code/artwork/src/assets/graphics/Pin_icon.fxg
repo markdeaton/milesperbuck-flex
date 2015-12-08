@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Graphic xmlns:fc="http://ns.adobe.com/flashcatalyst/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns="http://ns.adobe.com/fxg/2008" version="2.0">
+	<Ellipse width="19" height="19">
+		<fill>
+			<SolidColor color="#464547"/>
+		</fill>
+	</Ellipse>
+	<Path winding="nonZero" x="0.282" y="10.154" data="M 9.218 27.346 C 9.218 27.346 9.118 22.219 6.433 13.673 C 3.747 5.126 0 0 0 0 L 9.218 0 L 18.435 0 C 18.435 0 14.789 5.815 12.003 13.673 C 9.218 21.529 9.218 27.346 9.218 27.346 Z">
+		<fill>
+			<SolidColor color="#464547"/>
+		</fill>
+	</Path>
+	<Ellipse x="4" y="4" width="11" height="11">
+		<fill>
+			<SolidColor color="#AAD04B"/>
+		</fill>
+	</Ellipse>
+</Graphic>
