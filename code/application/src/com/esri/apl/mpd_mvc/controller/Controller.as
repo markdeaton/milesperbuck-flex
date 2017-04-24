@@ -10,9 +10,11 @@ package com.esri.apl.mpd_mvc.controller
 	import com.as3xls.xls.Sheet;
 	import com.esri.ags.FeatureSet;
 	import com.esri.ags.Graphic;
+	import com.esri.ags.events.GeoprocessorEvent;
 	import com.esri.ags.geometry.Extent;
 	import com.esri.ags.tasks.Geoprocessor;
 	import com.esri.ags.tasks.QueryTask;
+	import com.esri.ags.tasks.supportClasses.JobInfo;
 	import com.esri.ags.tasks.supportClasses.Query;
 	import com.esri.apl.mpd_mvc.UI.Processing;
 	import com.esri.apl.mpd_mvc.events.LocationSelectedEvent;
@@ -98,7 +100,12 @@ package com.esri.apl.mpd_mvc.controller
 			config = XML(event.result);
 			
 			qtState.url = config.gasRegionQuery;
+			
 			gpDriveZones.url = config.svcAreaGP;
+			gpDriveZones.addEventListener(GeoprocessorEvent.JOB_COMPLETE, onDriveZonesJobComplete);
+			gpDriveZones.addEventListener(GeoprocessorEvent.GET_RESULT_DATA_COMPLETE, onDriveZonesFound);
+			gpDriveZones.addEventListener(FaultEvent.FAULT, onTaskFault);
+			
 			model.baseMapUrl = config.baseMap;
 			
 			// Load gas prices XML
@@ -294,7 +301,7 @@ package com.esri.apl.mpd_mvc.controller
 			// Invoke the GP model
 			var params:Object = { "Start_Location":fs , "Distances":StringUtil.trim( sDists ) };
 			gpDriveZones.useAMF = false;
-			gpDriveZones.execute( params, new AsyncResponder( onDriveZonesFound, onTaskFault, token ) ); 
+			gpDriveZones.submitJob( params ); 
 			
 			// Invoke the NA service
 			// Set params for new, improved service
@@ -311,11 +318,15 @@ package com.esri.apl.mpd_mvc.controller
 			saDriveZones.solve( saDriveZonesParams );*/	
 		}
 	
-		private function onDriveZonesFound( event:Object, chosenLocation:Graphic ):void {
+		private function onDriveZonesJobComplete( event:GeoprocessorEvent ):void {
+			var jobId:String = event.jobInfo.jobId;
+			gpDriveZones.getResultData( jobId, "MPG_Svc_Areas" );
+		}
+		private function onDriveZonesFound( event:Object ):void {
 			try {
 				var fsDriveZones:FeatureSet = null;
 //				if ( event is ExecuteResult )
-				fsDriveZones = event.results[ 0 ].value;
+				fsDriveZones = event.parameterValue.value;
 //				else if ( event is ServiceAreaEvent )
 //					fsDriveZones = new FeatureSet( ServiceAreaEvent(event).serviceAreaSolveResult.serviceAreaPolygons );
 				

@@ -5,7 +5,7 @@
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
-      <libraryPathEntry kind="3" linkType="1" path="E:/Projects/FlexComponents/EsriAPI/Flex/3.4/libs/agslib-3.4-2013-06-30.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="E:/Projects/FlexComponents/EsriAPI/Flex/3.7/libs/agslib-3.7-2014-11-06.swc" useDefaultLinkType="false"/>
       <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="/GeometryEffects/bin/GeometryEffects.swc" useDefaultLinkType="false">
         <crossDomainRsls>
           <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="GeometryEffects.swf"/>
